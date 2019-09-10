@@ -8,7 +8,12 @@ window.onload = function init()
     gl = WebGLUtils.setupWebGL( canvas );
     if ( !gl ) { alert( "WebGL isn't available" ); }
 
-    let vertices = new Float32Array([0.5, 0.5, 0, -0.5, -0.5, 0.5]);
+    let objs = [
+        new Float32Array([0.5, 0.5, 0, -0.5, -0.5, 0.5]),
+        new Float32Array([-0.5, -0.5, 0, 0.5, 0.5, -0.5]),
+        new Float32Array([-0.5, 0.5, 0.5, -0.5, -0.5, -0.5])];
+
+    let count = 0;
 
     //  Configure WebGL
 
@@ -24,8 +29,22 @@ window.onload = function init()
 
     const bufferId = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, bufferId );
-    gl.bufferData( gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW );
+    gl.bufferData( gl.ARRAY_BUFFER, objs[0], gl.STATIC_DRAW );
 
+    // Click Listener
+
+    document.getElementById("gl-canvas").addEventListener("click", () => {
+
+        // 0,1,2,0,1,2,0... for every click
+        if (count > (objs.length - 2))
+            count = 0;
+        else
+            count++;
+        // count = (count > (objs.length - 2)) ? 0 : count + 1; // Same as above
+
+        gl.bufferData( gl.ARRAY_BUFFER,objs[count], gl.STATIC_DRAW );
+        render()
+    });
 
     // Associate out shader variables with our data buffer
 

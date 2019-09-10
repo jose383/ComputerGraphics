@@ -1,0 +1,36 @@
+.project
+
+# Eclipse
+.metadata
+.classpath
+.settings/
+build/
+#
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
+.recommenders
+*.launch
+.factorypath
+.buildpath
+.target
+.recommenders/
+.apt_generated/
+.cache-main
+.scala_dependencies
+.worksheet
+
+
+# IntelliJ
+.idea/
+*.eml
+*.iml
+out/
+#
+*.iws
+.idea/httpRequests

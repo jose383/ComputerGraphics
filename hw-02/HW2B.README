@@ -1,0 +1,7 @@
+Students -> Contributions
+    Arruda Jr, Randy Jame -> Vertices, Test
+    Lee, Nathan Seto -> Click Event Listener and Questions
+    Lopez, Jose F.  ->  Vertices, Click Event Listener and Change of Shape
+
+Description to Solution:
+    We added an array of vertices in order to change it easily to buffer. We also added the Click event listener to change vertices with every click and render it.

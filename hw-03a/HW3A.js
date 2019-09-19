@@ -52,14 +52,14 @@ window.onload = function init()
             case 'a':
                 // Left
                 if (!(vertices[0] <= -1.0 && vertices[2] <= -1.0)) {
-                    vertices[0] -= move; // Lower Left RIGHT -
-                    //vertices[1] += move; // Lower Left UP -
-                    vertices[2] -= move; // Upper Left RIGHT -
-                    //vertices[3] += move; // Upper Left UP +
-                    vertices[4] -= move; // Upper Right RIGHT +
-                    //vertices[5] += move; // Upper Right UP +
-                    vertices[6] -= move; // Lower Right RIGHT +
-                    //vertices[7] += move; // Lower Right UP -
+                    vertices[0] -= move; // Lower Left RIGHT/LEFT -
+                    //vertices[1] += move; // Lower Left UP/DOWN -
+                    vertices[2] -= move; // Upper Left RIGHT/LEFT -
+                    //vertices[3] += move; // Upper Left UP/DOWN +
+                    vertices[4] -= move; // Upper Right RIGHT/LEFT +
+                    //vertices[5] += move; // Upper Right UP/DOWN +
+                    vertices[6] -= move; // Lower Right RIGHT/LEFT +
+                    //vertices[7] += move; // Lower Right UP/DOWN -
                 }
 
                 gl.bufferData( gl.ARRAY_BUFFER, flatten(vertices), gl.STATIC_DRAW );
@@ -68,14 +68,14 @@ window.onload = function init()
             case 'd':
                 // Right
                 if (!(vertices[4] >= 1.0 && vertices[6] >= 1.0)){
-                    vertices[0] += move; // Lower Left RIGHT -
-                    //vertices[1] += move; // Lower Left UP -
-                    vertices[2] += move; // Upper Left RIGHT -
-                    //vertices[3] += move; // Upper Left UP +
-                    vertices[4] += move; // Upper Right RIGHT +
-                    //vertices[5] += move; // Upper Right UP +
-                    vertices[6] += move; // Lower Right RIGHT +
-                    //vertices[7] += move; // Lower Right UP -
+                    vertices[0] += move; // Lower Left RIGHT/LEFT -
+                    //vertices[1] += move; // Lower Left UP/DOWN -
+                    vertices[2] += move; // Upper Left RIGHT/LEFT -
+                    //vertices[3] += move; // Upper Left UP/DOWN +
+                    vertices[4] += move; // Upper Right RIGHT/LEFT +
+                    //vertices[5] += move; // Upper Right UP/DOWN +
+                    vertices[6] += move; // Lower Right RIGHT/LEFT +
+                    //vertices[7] += move; // Lower Right UP/DOWN -
                 }
 
                 gl.bufferData( gl.ARRAY_BUFFER, flatten(vertices), gl.STATIC_DRAW );
@@ -84,14 +84,14 @@ window.onload = function init()
             case 'w':
                 // Up
                 if (!(vertices[3] >= 1.0 && vertices[5] >= 1.0)){
-                    //vertices[0] += move; // Lower Left RIGHT -
-                    vertices[1] += move; // Lower Left UP -
-                    //vertices[2] += move; // Upper Left RIGHT -
-                    vertices[3] += move; // Upper Left UP +
-                    //vertices[4] += move; // Upper Right RIGHT +
-                    vertices[5] += move; // Upper Right UP +
-                    //vertices[6] += move; // Lower Right RIGHT +
-                    vertices[7] += move; // Lower Right UP -
+                    //vertices[0] += move; // Lower Left RIGHT/LEFT -
+                    vertices[1] += move; // Lower Left UP/DOWN -
+                    //vertices[2] += move; // Upper Left RIGHT/LEFT -
+                    vertices[3] += move; // Upper Left UP/DOWN +
+                    //vertices[4] += move; // Upper Right RIGHT/LEFT +
+                    vertices[5] += move; // Upper Right UP/DOWN +
+                    //vertices[6] += move; // Lower Right RIGHT/LEFT +
+                    vertices[7] += move; // Lower Right UP/DOWN -
                 }
 
                 gl.bufferData( gl.ARRAY_BUFFER, flatten(vertices), gl.STATIC_DRAW );
@@ -100,14 +100,14 @@ window.onload = function init()
             case 's':
                 // Down
                 if (!(vertices[1] <= -1.0 && vertices[7] <= -1.0)){
-                    //vertices[0] += move; // Lower Left RIGHT -
-                    vertices[1] -= move; // Lower Left UP -
-                    //vertices[2] += move; // Upper Left RIGHT -
-                    vertices[3] -= move; // Upper Left UP +
-                    //vertices[4] += move; // Upper Right RIGHT +
-                    vertices[5] -= move; // Upper Right UP +
-                    //vertices[6] += move; // Lower Right RIGHT +
-                    vertices[7] -= move; // Lower Right UP -
+                    //vertices[0] += move; // Lower Left RIGHT/LEFT -
+                    vertices[1] -= move; // Lower Left UP/DOWN -
+                    //vertices[2] += move; // Upper Left RIGHT/LEFT -
+                    vertices[3] -= move; // Upper Left UP/DOWN +
+                    //vertices[4] += move; // Upper Right RIGHT/LEFT +
+                    vertices[5] -= move; // Upper Right UP/DOWN +
+                    //vertices[6] += move; // Lower Right RIGHT/LEFT +
+                    vertices[7] -= move; // Lower Right UP/DOWN -
                 }
 
                 gl.bufferData( gl.ARRAY_BUFFER, flatten(vertices), gl.STATIC_DRAW );

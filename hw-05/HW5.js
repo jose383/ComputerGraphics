@@ -43,7 +43,9 @@ var theta =[0, 0, 0];
 
 var thetaLoc;
 
-var flag = true;
+var flag = false;
+
+var rotateVal = 2.0;
 
 function quad(a, b, c, d) {
 
@@ -145,13 +147,62 @@ window.onload = function init() {
         false, flatten(projection));
 
     render();
+
+    document.addEventListener( "keydown", (e) => {
+
+        switch (e.key) {
+            case 'ArrowUp':
+                //rotateVal = -2.0;
+                rotateVal = (rotateVal > 0) ? rotateVal * -1.0 : rotateVal;
+
+                axis = xAxis;
+                theta[axis] += rotateVal;
+
+                console.log("Up");
+                break;
+
+            case 'ArrowDown':
+                //rotateVal = 2.0;
+                rotateVal = (rotateVal < 0) ? rotateVal * -1.0 : rotateVal;
+
+                axis = xAxis;
+                theta[axis] += rotateVal;
+
+                console.log("Down");
+                break;
+
+            case 'ArrowLeft':
+                //rotateVal = -2.0;
+                rotateVal = (rotateVal > 0) ? rotateVal * -1.0 : rotateVal;
+
+                axis = yAxis;
+                theta[axis] += rotateVal;
+                console.log("Left");
+                break;
+
+            case 'ArrowRight':
+                //rotateVal = 2.0;
+                rotateVal = (rotateVal < 0) ? rotateVal * -1.0 : rotateVal;
+
+                axis = yAxis;
+                theta[axis] += rotateVal;
+
+                console.log("Right");
+                break;
+
+            case 't':
+                flag = !flag;
+                console.log("Toggle Rotation");
+                break;
+        }
+    });
 };
 
 var render = function(){
 
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    if(flag) theta[axis] += 2.0;
+    if(flag) theta[axis] += rotateVal;
 
     modelView = mat4();
     modelView = mult(modelView, rotate(theta[xAxis], [1, 0, 0] ));

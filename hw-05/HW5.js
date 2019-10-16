@@ -3,19 +3,20 @@
 var canvas;
 var gl;
 
-var numVertices  = 36;
+var numVertices  = 12;//36;
 
 var pointsArray = [];
 var normalsArray = [];
 
 var vertices = [
     vec4( -0.5, -0.5,  0.5, 1.0 ),
-    vec4( -0.5,  0.5,  0.5, 1.0 ),
-    vec4( 0.5,  0.5,  0.5, 1.0 ),
+    //vec4( -0.5,  0.5,  0.5, 1.0 ),
+    //vec4( 0.5,  0.5,  0.5, 1.0 ),
+		vec4(0, 0.5, 0),
     vec4( 0.5, -0.5,  0.5, 1.0 ),
-    vec4( -0.5, -0.5, -0.5, 1.0 ),
-    vec4( -0.5,  0.5, -0.5, 1.0 ),
-    vec4( 0.5,  0.5, -0.5, 1.0 ),
+    //vec4( -0.5, -0.5, -0.5, 1.0 ),
+    //vec4( -0.5,  0.5, -0.5, 1.0 ),
+    //vec4( 0.5,  0.5, -0.5, 1.0 ),
     vec4( 0.5, -0.5, -0.5, 1.0 )
 ];
 
@@ -60,24 +61,28 @@ function quad(a, b, c, d) {
     pointsArray.push(vertices[b]);
     normalsArray.push(normal);
     pointsArray.push(vertices[c]);
-    normalsArray.push(normal);
+    normalsArray.push(normal);/*
     pointsArray.push(vertices[a]);
     normalsArray.push(normal);
     pointsArray.push(vertices[c]);
     normalsArray.push(normal);
     pointsArray.push(vertices[d]);
-    normalsArray.push(normal);
+    normalsArray.push(normal);*/
 }
 
 
 function colorCube()
 {
-    quad( 1, 0, 3, 2 );
+	quad(0, 2, 1, 0);
+	quad(2, 3, 1, 0);
+	quad(1, 3, 0, 0);
+	quad(3, 2, 0, 0);
+    /*quad( 1, 0, 3, 2 );
     quad( 2, 3, 7, 6 );
     quad( 3, 0, 4, 7 );
     quad( 6, 5, 1, 2 );
     quad( 4, 5, 6, 7 );
-    quad( 5, 4, 0, 1 );
+    quad( 5, 4, 0, 1 );*/
 }
 
 

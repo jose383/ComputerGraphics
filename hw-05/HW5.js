@@ -1,24 +1,29 @@
+/**
+ Group 1
+ 10/20/2019
+ Arruda Jr, Randy Jame
+ Lee, Nathan Seto
+ Lopez, Jose F.
+ **/
+
 "use strict";
 
 let canvas;
 let gl;
 
-let numVertices  = 12;//36;
+let numVertices  = 18; // 3*[triangle sides] + 6*[square sides] = 3*4 + 6*1 = 18
 
 let pointsArray = [];
 let normalsArray = [];
 
 let vertices = [
-    vec4( -0.5, -0.5,  0.5, 1.0 ),
-    //vec4( -0.5,  0.5,  0.5, 1.0 ),
-    //vec4( 0.5,  0.5,  0.5, 1.0 ),
-    vec4(0, 0.5, 0),
-    vec4( 0.5, -0.5,  0.5, 1.0 ),
-    //vec4( -0.5, -0.5, -0.5, 1.0 ),
-    //vec4( -0.5,  0.5, -0.5, 1.0 ),
-    //vec4( 0.5,  0.5, -0.5, 1.0 ),
-    vec4( 0.5, -0.5, -0.5, 1.0 )
+    vec4( 0.0, -0.5,  0.5, 1.0 ), // Lower-Front
+    vec4( -0.5, -0.5,  0.0, 1.0 ), // Lower-Left
+    vec4( 0.0, 0.3,  0.0, 1.0 ), // TOP
+    vec4( 0.5, -0.5, 0.0, 1.0), // Lower-Right
+    vec4( 0.0, -0.5,  -0.5, 1.0 ) // Lower-Back
 ];
+
 
 let lightPosition = vec4(1.0, 1.0, 1.0, 0.0 );
 let lightAmbient = vec4(0.2, 0.2, 0.2, 1.0 );
@@ -40,13 +45,38 @@ let xAxis = 0;
 let yAxis = 1;
 let zAxis = 2;
 let axis = 0;
-let theta =[0, 0, 0];
+let thetaVector =[0, 0, 0];
 
 let thetaLoc;
-
 let flag = false;
-
 let rotateVal = 2.0;
+
+let near = 0.01;
+let far = 5.0;
+let radius = 1.3;
+let theta = radians(0);
+let phi = radians(-15);
+
+let  fovY = 70.0;   // Field-of-view in Y direction angle (in degrees)
+let  aspect = 1.0;  // Viewport aspect ratio (Aspect = 1.0)
+
+let eye;
+const at = vec3(0.0, 0.0, 0.0);
+const up = vec3(0.0, 1.0, 0.0);
+
+let tri = (a,b,c) => {
+    let t1 = subtract(vertices[b], vertices[a]);
+    let t2 = subtract(vertices[c], vertices[b]);
+    let normal = cross(t1, t2);
+    normal = vec3(normal);
+
+    pointsArray.push(vertices[a]);
+    normalsArray.push(normal);
+    pointsArray.push(vertices[b]);
+    normalsArray.push(normal);
+    pointsArray.push(vertices[c]);
+    normalsArray.push(normal);
+};
 
 function quad(a, b, c, d) {
 
@@ -61,35 +91,35 @@ function quad(a, b, c, d) {
     pointsArray.push(vertices[b]);
     normalsArray.push(normal);
     pointsArray.push(vertices[c]);
-    normalsArray.push(normal);/*
+    normalsArray.push(normal);
+
+
     pointsArray.push(vertices[a]);
     normalsArray.push(normal);
     pointsArray.push(vertices[c]);
     normalsArray.push(normal);
     pointsArray.push(vertices[d]);
-    normalsArray.push(normal);*/
+    normalsArray.push(normal);
+
 }
 
+let colorPyramid = () => {
 
-function colorCube()
-{
-    quad(0, 2, 1, 0);
-    quad(2, 3, 1, 0);
-    quad(1, 3, 0, 0);
-    quad(3, 2, 0, 0);
-    /*quad( 1, 0, 3, 2 );
-    quad( 2, 3, 7, 6 );
-    quad( 3, 0, 4, 7 );
-    quad( 6, 5, 1, 2 );
-    quad( 4, 5, 6, 7 );
-    quad( 5, 4, 0, 1 );*/
-}
+    tri(0,2,1); // Left-Front Side
+    tri(3,2,0); // Right-Front Side
+    tri(4,2,3); // Right-Back Side
+    tri(1,2,4); // Left-Back Side
+    quad(3,0,1,4); // Bottom Side
+
+};
 
 
 window.onload = function init() {
     canvas = document.getElementById( "gl-canvas" );
 
-    gl = WebGLUtils.setupWebGL( canvas );
+    aspect = canvas.width/canvas.height;
+
+    gl = WebGLUtils.setupWebGL( canvas, null );
     if ( !gl ) { alert( "WebGL isn't available" ); }
 
     gl.viewport( 0, 0, canvas.width, canvas.height );
@@ -103,7 +133,7 @@ window.onload = function init() {
     program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
 
-    colorCube();
+    colorPyramid();
 
     let nBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, nBuffer );
@@ -123,9 +153,10 @@ window.onload = function init() {
 
     thetaLoc = gl.getUniformLocation(program, "theta");
 
-    viewerPos = vec3(0.0, 0.0, -20.0 );
+    //viewerPos = vec3(0.0, 0.0, -20.0 );
 
-    projection = ortho(-1, 1, -1, 1, -100, 100);
+    //projection = ortho(-1, 1, -1, 1, -100, 100);
+    //projection = perspective(fovY, aspect, near, far);
 
     let ambientProduct = mult(lightAmbient, materialAmbient);
     let diffuseProduct = mult(lightDiffuse, materialDiffuse);
@@ -143,67 +174,79 @@ window.onload = function init() {
     gl.uniform1f(gl.getUniformLocation(program,
         "shininess"),materialShininess);
 
-    gl.uniformMatrix4fv( gl.getUniformLocation(program, "projectionMatrix"),
-        false, flatten(projection));
+    //gl.uniformMatrix4fv( gl.getUniformLocation(program, "projectionMatrix"), false, flatten(projection));
 
-    render();
 
+
+    // Start Rotation when key is pressed
     document.addEventListener( "keydown", (e) => {
-
         switch (e.key) {
             case 'ArrowUp':
-                rotateVal = (rotateVal > 0) ? rotateVal * -1.0 : rotateVal;
+                rotateVal = (rotateVal > 0) ? rotateVal * -1.0 : rotateVal; // If Negative, keep Negative
 
-                axis = xAxis;
-                flag = true;
+                axis = xAxis; // Select Axis for Rotation
+                flag = true; // Start Rotation in Render()
 
                 break;
 
             case 'ArrowDown':
-                rotateVal = (rotateVal < 0) ? rotateVal * -1.0 : rotateVal;
+                rotateVal = (rotateVal < 0) ? rotateVal * -1.0 : rotateVal; // If Positive, keep Positive
 
-                axis = xAxis;
-                flag = true;
+                axis = xAxis; // Select Axis for Rotation
+                flag = true; // Start Rotation in Render()
 
                 break;
 
             case 'ArrowLeft':
-                rotateVal = (rotateVal > 0) ? rotateVal * -1.0 : rotateVal;
+                rotateVal = (rotateVal > 0) ? rotateVal * -1.0 : rotateVal; // If Negative, keep Negative
 
-                axis = yAxis;
-                flag = true;
+                axis = yAxis; // Select Axis for Rotation
+                flag = true; // Start Rotation in Render()
 
                 break;
 
             case 'ArrowRight':
-                rotateVal = (rotateVal < 0) ? rotateVal * -1.0 : rotateVal;
+                rotateVal = (rotateVal < 0) ? rotateVal * -1.0 : rotateVal; // If Positive, keep Positive
 
-                axis = yAxis;
-                flag = true;
+                axis = yAxis; // Select Axis for Rotation
+                flag = true; // Start Rotation in Render()
 
                 break;
         }
     });
 
-    document.addEventListener('keyup', () => { flag = false; });
+    // Stop Rotation when key is released
+    document.addEventListener('keyup', () => {
+        flag = false; // Stop Rotation in Render()
+    });
+
+    render();
 };
 
-let render = function(){
+let render = function() {
 
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    if(flag) theta[axis] += rotateVal;
-
+    // Set Camera
+    //eye = vec3(radius * Math.sin(theta) * Math.cos(phi), radius * Math.sin(theta) * Math.sin(phi), radius * Math.cos(theta));
+    //eye = vec3(0, 0, radius);
+    eye = vec3(0, radius * Math.sin(phi), radius);
     modelView = mat4();
-    modelView = mult(modelView, rotate(theta[xAxis], [1, 0, 0] ));
-    modelView = mult(modelView, rotate(theta[yAxis], [0, 1, 0] ));
-    modelView = mult(modelView, rotate(theta[zAxis], [0, 0, 1] ));
+    modelView = lookAt(eye, at , up);
 
-    gl.uniformMatrix4fv( gl.getUniformLocation(program,
-        "modelViewMatrix"), false, flatten(modelView) );
+    // Rotate Shape
+    if(flag) thetaVector[axis] += rotateVal;
+    modelView = mult(modelView, rotate(thetaVector[xAxis], [1, 0, 0] ));
+    modelView = mult(modelView, rotate(thetaVector[yAxis], [0, 1, 0] ));
+    modelView = mult(modelView, rotate(thetaVector[zAxis], [0, 0, 1] ));
+
+    // Perspective Projection
+    projection = perspective(fovY, aspect, near, far);
+
+    gl.uniformMatrix4fv( gl.getUniformLocation(program, "modelViewMatrix"), false, flatten(modelView) );
+    gl.uniformMatrix4fv( gl.getUniformLocation(program, "projectionMatrix"), false, flatten(projection));
 
     gl.drawArrays( gl.TRIANGLES, 0, numVertices );
-
 
     requestAnimFrame(render);
 };

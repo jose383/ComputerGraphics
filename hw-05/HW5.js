@@ -25,20 +25,17 @@ let vertices = [
 ];
 
 
-let lightPosition = vec4(1.0, 1.0, 1.0, 0.0 );
-let lightAmbient = vec4(0.2, 0.2, 0.2, 1.0 );
-let lightDiffuse = vec4( 1.0, 1.0, 1.0, 1.0 );
-let lightSpecular = vec4( 1.0, 1.0, 1.0, 1.0 );
+let lightPosition = vec4(1.0, 1.0, 1.0, 0.0 ); // Far Away
+let lightAmbient = vec4(0.2, 0.2, 0.2, 1.0 ); // Little Bit
+let lightDiffuse = vec4( 1.0, 1.0, 1.0, 1.0 ); // White
+let lightSpecular = vec4( 1.0, 1.0, 1.0, 1.0 ); // White
 
-let materialAmbient = vec4( 1.0, 0.0, 1.0, 1.0 );
-let materialDiffuse = vec4( 1.0, 0.8, 0.0, 1.0);
-let materialSpecular = vec4( 1.0, 0.8, 0.0, 1.0 );
-let materialShininess = 100.0;
+let materialAmbient = vec4( 1.0, 0.0, 1.0, 1.0 ); // A Little Purple-ish
+let materialDiffuse = vec4( 1.0, 0.8, 0.0, 1.0); // Red + Some Green (Yellow-ish)
+let materialSpecular = vec4( 1.0, 0.8, 0.0, 1.0 ); // Red not absorbed, Green is absorbed a little bit, Blue is completely absorbed
+let materialShininess = 100.0; // Polished Metal (Constant)
 
-let ctm;
-let ambientColor, diffuseColor, specularColor;
 let modelView, projection;
-let viewerPos;
 let program;
 
 let xAxis = 0;
@@ -153,8 +150,6 @@ window.onload = function init() {
 
     thetaLoc = gl.getUniformLocation(program, "theta");
 
-    //viewerPos = vec3(0.0, 0.0, -20.0 );
-
     //projection = ortho(-1, 1, -1, 1, -100, 100);
     //projection = perspective(fovY, aspect, near, far);
 
@@ -175,8 +170,6 @@ window.onload = function init() {
         "shininess"),materialShininess);
 
     //gl.uniformMatrix4fv( gl.getUniformLocation(program, "projectionMatrix"), false, flatten(projection));
-
-
 
     // Start Rotation when key is pressed
     document.addEventListener( "keydown", (e) => {

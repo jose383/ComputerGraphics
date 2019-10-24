@@ -101,25 +101,34 @@ void main(void) {
 <script id="shader-phong-phong-fs" type="x-shader/x-fragment">
   precision mediump float;
 
-  uniform vec4 uAmbientMaterialColor;
-  uniform vec4 uDiffuseMaterialColor;
-  uniform vec4 uSpecularMaterialColor;
+  uniform vec3 uAmbientLightColor;
+  uniform vec3 uDiffuseLightColor;
+  uniform vec3 uSpecularLightColor;
+  uniform vec3 uAmbientMaterialColor;
+  uniform vec3 uDiffuseMaterialColor;
+  uniform vec3 uSpecularMaterialColor;
+
   uniform float uShininess;
   uniform vec3 uLightPosition;
 
-  varying vec3 vNormal;
-  varying vec3 vPosition;
+  varying vec3 vNormal; // N
+  varying vec3 vPosition; // E
+  varying vec3 L;
 
   void main()
   {
-  vec3 L = normalize(uLightPosition - vPosition);
   vec4 fColor;
+  vec3 L = normalize(uLightPosition - vPosition);
   vec3 H = normalize( L + vPosition );
-  vec4 ambient = uAmbientMaterialColor;
+
+  vec4 ambient = vec4(uAmbientLightColor * uAmbientMaterialColor, 1.0);
+
   float Kd = max( dot(L, vNormal), 0.0 );
-  vec4 diffuse = Kd*uDiffuseMaterialColor;
+  vec4 diffuse = Kd * vec4(uDiffuseLightColor * uDiffuseMaterialColor, 1.0);
+
   float Ks = pow( max(dot(vNormal, H), 0.0), uShininess );
-  vec4 specular = Ks * uSpecularMaterialColor;
+  vec4 specular = Ks * vec4(uSpecularLightColor * uSpecularMaterialColor, 1.0);
+
   if( dot(L, vNormal) < 0.0 ) specular = vec4(0.0, 0.0, 0.0, 1.0);
   fColor = ambient + diffuse + specular;
   fColor.a = 1.0;

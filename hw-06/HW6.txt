@@ -1,7 +1,8 @@
 Group 1
-    10/20/2019
+    10/31/2019
     Arruda Jr, Randy Jame
     Lee, Nathan Seto
     Lopez, Jose F.
 
 Description:
+    Added texture with checkerboard pattern to shape from HW05.

@@ -13,10 +13,9 @@ let gl;
 
 let numVertices  = 18; // 3*[triangle sides] + 6*[square sides] = 3*4 + 6*1 = 18
 let texSize = 64;
+
 // Create a checkerboard pattern using floats
-
-
-let image1 = []
+let image1 = [];
 for (let i =0; i<texSize; i++)  image1[i] = [];
 for (let i =0; i<texSize; i++)
     for ( let j = 0; j < texSize; j++)
@@ -27,7 +26,6 @@ for (let i =0; i<texSize; i++) for (let j=0; j<texSize; j++) {
 }
 
 // Convert floats to ubytes for texture
-
 let image2 = new Uint8Array(4*texSize*texSize);
 
 for ( let i = 0; i < texSize; i++ )
@@ -208,6 +206,7 @@ window.onload = function init() {
     let tBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, tBuffer);
     gl.bufferData( gl.ARRAY_BUFFER, flatten(texCoordsArray), gl.STATIC_DRAW );
+
     let vTexCoord = gl.getAttribLocation( program, "vTexCoord");
     gl.vertexAttribPointer(vTexCoord, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vTexCoord);
